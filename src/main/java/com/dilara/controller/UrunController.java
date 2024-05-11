@@ -1,11 +1,13 @@
 package com.dilara.controller;
 
+import com.dilara.entity.Kategori;
 import com.dilara.entity.Urun;
 import com.dilara.service.KategoriService;
 import com.dilara.service.UrunService;
 import com.dilara.utility.Response;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class UrunController {
@@ -60,10 +62,14 @@ public class UrunController {
         System.out.println("Kategori\t| Ürün Adı\t| Fiyat\t| Stok");
         System.out.println("-----------------------------------------------");
         for (Urun urun : urunler) {
-            String kategoriAdi = kategoriService.findById(urun.getKategoriId()).getClass().getSimpleName();
-            String satir = String.format("%s\t| %s\t| %.2f\t| %d",
-                    kategoriAdi, urun.getAd(), urun.getFiyat(), urun.getStok());
-            System.out.println(satir);
+            Optional<Kategori> optionalKategori = (Optional<Kategori>) kategoriService.findById(urun.getKategoriId());
+            if (optionalKategori.isPresent()) {
+                Kategori kategori = optionalKategori.get();
+                String kategoriAdi = kategori.getAd();
+                String satir = String.format("%s\t| %s\t| %.2f\t| %d",
+                        kategoriAdi, urun.getAd(), urun.getFiyat(), urun.getStok());
+                System.out.println(satir);
+            }
         }
     }
 
